@@ -1,6 +1,5 @@
 package br.com.hioktec.clientes.config;
 
-import org.h2.result.LocalResultFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
