@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +39,7 @@ public class ServicoPrestadoController {
 	private final ClienteRepository clienteRepository;
 	private final ServicoPrestadoRepository repository;
 	private final BigDecimalConverter bigDecimalConverter;
+	private final MessageSource messageSource;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED) // para dar created ao invés do padrao ok
@@ -47,7 +50,8 @@ public class ServicoPrestadoController {
 		Cliente cliente= clienteRepository
 				.findById(idCliente)
 				.orElseThrow(() -> 
-					new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente não encontrado!"));
+					new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							messageSource.getMessage("response.cliente.inexistente", null, Locale.getDefault())));
 				
 		
 		ServicoPrestado servicoPrestado = new ServicoPrestado();
@@ -74,7 +78,7 @@ public class ServicoPrestadoController {
 	public void deletar(@PathVariable Long id) {
 		ServicoPrestado servico = repository.findById(id)
 									.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-																	"Serviço Prestado não encontrado!"));
+											messageSource.getMessage("response.servico.inexistente", null, Locale.getDefault())));
 		repository.delete(servico);
 	}
 	
@@ -87,7 +91,7 @@ public class ServicoPrestadoController {
 			BigDecimal valor = bigDecimalConverter.converter(dto.getPreco());
 			Cliente cliente = clienteRepository.findById(dto.getIdCliente())
 								.orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-																			"Cliente não encontrado!"));
+									messageSource.getMessage("response.cliente.inexistente", null, Locale.getDefault())));
 			
 			ServicoPrestado servico = servicoOptional.get();
 			servico.setDescricao(dto.getDescricao());
@@ -104,6 +108,6 @@ public class ServicoPrestadoController {
 		return repository
 					.findById(id)
 					.orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-																"Serviço Prestado não encontrado!"));
+							messageSource.getMessage("response.servico.inexistente", null, Locale.getDefault())));
 	}
 }

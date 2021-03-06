@@ -13,9 +13,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// classe para interceptar os erros de valida��o e retornar apenas as mensagens dos erros
-// obs: anota��o Valid lan�a erro de MethodArgumentNotValidException
-// interceptar tamb�m ResponseStatusException e retornar apenas uma mensagem do erro
+// classe para interceptar os erros de validacao e retornar apenas as mensagens dos erros
+// obs: anotacao Valid lanca erro de MethodArgumentNotValidException
+// interceptar tambem ResponseStatusException e retornar apenas uma mensagem do erro
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
 
@@ -33,7 +33,7 @@ public class ApplicationControllerAdvice {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ApiErrors> handleResponseStatusException(ResponseStatusException exception){
-        String mensagemErro = exception.getMessage();
+        String mensagemErro = exception.getReason();
         HttpStatus codigoStatus = exception.getStatus();
         ApiErrors apiErrors = new ApiErrors(mensagemErro);
         return new ResponseEntity<ApiErrors>(apiErrors, codigoStatus);
